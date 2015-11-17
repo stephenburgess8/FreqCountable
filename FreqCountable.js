@@ -308,13 +308,17 @@
         {
         	if(typeof sorted[top] !== 'undefined' && sorted[top] !== null && sorted[top].length > 0)
         	{
-        		console.log(sorted[top]);
         		limited[sorted[top].pop()] = top;
         		count++;
-        		console.log(options.freqItemCount);
-        		console.log(count);
         	}
-        	else { count++; top--; }
+        	else
+        	{ 
+        		top--;
+        		if (typeof sorted[top] === 'undefined' || sorted[top] === null) {
+        			count++;
+        		}
+        		while (sorted[top] === 0) { top--; }
+        	}
         }
 		return limited;
 	}
