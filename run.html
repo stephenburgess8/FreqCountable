@@ -6,14 +6,20 @@
 <script src="FreqCountable.js"></script>
 </head>
 <body>
+<h1>Text Input</h1>
 <textarea id="textarea" rows="4" cols="50">
 At w3schools.com hey you will learn how hey to make a website. We offer free tutorials hey in all web development technologies.  what what you you you you me me me me me me i am i am wannabe wannabe hey hey hey juice juice juice
 pine pine pine pine web web web web web web web web web
 </textarea>
+<h1>Results</h1>
+<div id="result"></div>
 <script>
 
-Countable.onceFreq(document.getElementById("textarea"), function(counter) {
-	console.log(counter);
+Countable.freq(document.getElementById("textarea"), function(counter) {
+	document.getElementById("result").innerHTML = "";
+	for (word in counter) {
+		document.getElementById("result").innerHTML += word + " " + counter[word] +"<br>";
+	}
 })
 </script>
 </body>

@@ -295,9 +295,7 @@
 			top = options.max,
 			sorted = [],
 			limited = {};
-
-		for (var i = 0; i <= options.max; i++) { sorted[i] = []; }
-
+		for (var i = 0; i <= top; i++) { sorted[i] = []; }
         for (var word in map)
         {
         	if (map.hasOwnProperty(word))
@@ -305,14 +303,18 @@
         		sorted[map[word]].push(word);
         	}
         }
+
         while (count < options.freqItemCount)
         {
-        	if(sorted[top].length > 0)
+        	if(typeof sorted[top] !== 'undefined' && sorted[top] !== null && sorted[top].length > 0)
         	{
+        		console.log(sorted[top]);
         		limited[sorted[top].pop()] = top;
         		count++;
+        		console.log(options.freqItemCount);
+        		console.log(count);
         	}
-        	else { top--; }
+        	else { count++; top--; }
         }
 		return limited;
 	}
@@ -331,31 +333,33 @@
 	*/
 
 	function freq (element, options)
-	{
-		/*
-		if (!options.hasOwnProperty("freqItemCount") || options.freqItemCount <= 0)
-		{
-			options.freqItemCount = 10;
-		}
-		*/
+	{		
 		var words = [],
+			wordCount = 0,
 			wordFreqMap = {},
 			trimmed = strip(element, setOptions(options));
 
 		words = trimmed ? (trimmed.replace(/['";:,.?¿\-!¡]+/g, '').match(/\S+/g) ||
 						[]) : 0;
+		wordCount = words ? words.length : 0;
 
+		if (wordCount == 0) { return; }
+		options.max = 1;
 		for (var word in words)
 		{
             if (wordFreqMap.hasOwnProperty(words[word]))
             {
             	wordFreqMap[words[word]] = wordFreqMap[words[word]] + 1;
-            	if(wordFreqMap[words[word]] > options.max) { 
+            	if(wordFreqMap[words[word]] > options.max)
+            	{ 
             		options.max = wordFreqMap[words[word]]; 
             	};
             }
 	        else { wordFreqMap[words[word]] = 1;}
         }
+
+        if (options.freqItemCount > wordCount) { options.freqItemCount = wordCount }
+        else if (options.freqItemCount <= 0) { options.freqItemCount = 10; }
 
 		return countingSort(words, wordFreqMap, options);
 	}
