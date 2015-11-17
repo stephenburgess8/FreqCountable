@@ -198,6 +198,8 @@
 			stripTags: false,
 			ignoreReturns: false,
 			ignoreZeroWidth: true,
+			max: 0,
+			freqItemCount : 10
 		}
 
 		for (var prop in options)
@@ -287,32 +289,31 @@
 	*                               
 	*/
 
-	function countingSort (element, options)
+	function countingSort (element, map, options)
 	{
-		var sorted = [], limited = [], count = 0, top = options.max;
+		var count = 0,
+			top = options.max,
+			sorted = [],
+			limited = {};
 
-		for (var i = 0; i <= options.max; i++)
-		{
-			sorted[i] = [];
-		}
+		for (var i = 0; i <= options.max; i++) { sorted[i] = []; }
 
-	   /* Push  */
-        for (var word in element)
+        for (var word in map)
         {
-        	if (element.hasOwnProperty(word)) { sorted[element[word]].push(word); }
+        	if (map.hasOwnProperty(word))
+        	{ 
+        		sorted[map[word]].push(word);
+        	}
         }
-
-        while (count < options.max)
+        while (count < options.freqItemCount)
         {
         	if(sorted[top].length > 0)
         	{
-        		limited.push(sorted[top].pop);
+        		limited[sorted[top].pop()] = top;
         		count++;
         	}
         	else { top--; }
-        	
         }
-
 		return limited;
 	}
 
@@ -331,28 +332,32 @@
 
 	function freq (element, options)
 	{
-		options.max = 0;
-
+		/*
 		if (!options.hasOwnProperty("freqItemCount") || options.freqItemCount <= 0)
 		{
 			options.freqItemCount = 10;
 		}
+		*/
+		var words = [],
+			wordFreqMap = {},
+			trimmed = strip(element, setOptions(options));
 
-		var wordFreqMap = {},
-			trimmed = strip(element, setOptions(options)),
-			words = trimmed ? (trimmed.replace(/['";:,.?¿\-!¡]+/g, '').match(/\S+/g) ||
-						[]).length : 0;
+		words = trimmed ? (trimmed.replace(/['";:,.?¿\-!¡]+/g, '').match(/\S+/g) ||
+						[]) : 0;
 
 		for (var word in words)
 		{
-            if (word in wordFreqMap)
+            if (wordFreqMap.hasOwnProperty(words[word]))
             {
-            	if(++wordFreqMap[word] > options.max) { options.max = wordFreqMap[word]; };
+            	wordFreqMap[words[word]] = wordFreqMap[words[word]] + 1;
+            	if(wordFreqMap[words[word]] > options.max) { 
+            		options.max = wordFreqMap[words[word]]; 
+            	};
             }
-	        else { wordFreqMap[word] = 1; }
+	        else { wordFreqMap[words[word]] = 1;}
         }
 
-        return countingSort(wordFreqMap, options);
+		return countingSort(words, wordFreqMap, options);
 	}
 
 
@@ -388,7 +393,7 @@
 			words: trimmed ? (trimmed.replace(/['";:,.?¿\-!¡]+/g, '').match(/\S+/g) ||
 				[]).length : 0,
 			characters: trimmed ? decode(trimmed.replace(/\s/g, '')).length : 0,
-			all: decode(options.ignoreReturns ? original.replace(/[\n\r]/g, '') : original).length
+			all: decode(options.ignoreReturns ? element.replace(/[\n\r]/g, '') : element).length
 		}
 	}
 
@@ -476,7 +481,7 @@
 			{
 				var handler = function ()
 				{	
-					callback.call(element, freq(element, options));
+					callback.call(element, freq(element, setOptions(options)));
 				};
 
 				liveElements.push({
@@ -564,6 +569,18 @@
 			loop(elements, function (element)
 			{
 				callback.call(element, count(element, options));
+			});
+
+			return this;
+		},
+
+		onceFreq: function (elements, callback, options)
+		{
+			if (!validateArguments(elements, callback)) { return; }
+
+			loop(elements, function (element)
+			{
+				callback.call(element, freq(element, setOptions(options)));
 			});
 
 			return this;
