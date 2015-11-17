@@ -1,9 +1,7 @@
 /**
- * FreqCountable.js is a script based on Countable.js.
- * Countable.js is a script to allow for live paragraph-,
- * word- and character-counting on an HTML element.
- * FreqCountable.js provides additional functionality
- * by added word and character frequency counters.
+ * FreqCountable.js is a script based on Countable.js. Countable.js is a script to allow for
+ * live paragraph-, word- and character-counting on an HTML element. FreqCountable.js provides
+ * additional functionality by added word and character frequency counters.
  *
  * Countable.js
  * @author		Sacha Schmid (<https://github.com/RadLikeWhoa>)
@@ -15,11 +13,11 @@
  * @author		Stephen Burgess <https://github.com/stephenburgess8>)
  * @version 	0.1.0
  * @license		MIT
- * @see
+ * @see         
  *
  *
  * Table of Contents
- * ______________________________________________
+ *************************************************
  *
  * Declarations
  * Browser Support
@@ -32,8 +30,9 @@
 
 
 /**
- * Note: For the purpose of this internal documentation, arguments of the type
- * {Nodes} are to be interpreted as either {NodeList} or {Element}.
+ * Note: For the purpose of this internal documentation, arguments of the type {Nodes} are to be
+ * interpreted as either {NodeList} or {Element}.
+ *
  */
 
 ;(function (global)
@@ -43,11 +42,10 @@
    /**
 	* @private
 	*
-	* `_liveElements` holds all elements that have the live-counting
-	* functionality bound to them.
+	*`liveElements` holds all elements that have the live-counting functionality bound to them.
 	*
-	* `_event` holds the event to handle the live counting, based on the
-	* browser's capabilities.
+	*`input` holds the event to handle the live counting, based on the browser's capabilities.
+	*
 	*/
 
 	var liveElements = [],
@@ -55,11 +53,11 @@
 
 	/**************************************************************************** Browser Support */
    /**
-	* IE9 is a special case. It does not fire an 'input' event when
-	* characters are deleted (via DEL key, BACKSPACE key, and CUT).
-	* If we want support for those actions we need to use the 'keyup'
-	* event instead.
+	* IE9 is a special case. It does not fire an 'input' event when characters are deleted (via
+	* DEL key, BACKSPACE key, and CUT). If we want support for those actions we need to use the
+	* 'keyup' event instead.
 	* more info: http://www.matts411.com/post/internet-explorer-9-oninput/
+	*
 	*/
 
 	if (navigator.userAgent.match(/MSIE 9.0/))
@@ -68,14 +66,13 @@
 	}
 
    /**
-	* `String.trim()` polyfill for non-supporting browsers. This is the
-	* recommended polyfill on MDN.
+	* `String.trim()` polyfill for non-supporting browsers. This is the recommended polyfill on MDN.
 	*
 	* @see     <http://goo.gl/uYveB>
 	* @see     <http://goo.gl/xjIxJ>
 	*
-	* @return  {String}  The original string with leading and trailing
-	*                    whitespace removed.
+	* @return  {String}  The original string with leading and trailing whitespace removed.
+	*
 	*/
 
 	if (!String.prototype.trim)
@@ -89,17 +86,16 @@
 	/***************************************************************** Programmatic Functionality */
    /**
 	* `validateArguments` validates the arguments given to each function call.
-	* Errors are logged to the console as warnings, but Countable fails
-	* silently.
+	* Errors are logged to the console as warnings, but Countable fails silently.
 	*
 	* @private
 	*
-	* @param   {Nodes}     elements  The (collection of) element(s) to
-	*                                validate.
+	* @param   {Nodes}     elements  The (collection of) element(s) to validate.
 	*
 	* @param   {Function}  callback  The callback function to validate.
 	*
 	* @return  {Boolean}   Returns whether all arguments are vaild.
+	*
 	*/
 	
 	function validateArguments (elements, callback)
@@ -127,11 +123,9 @@
    /**
 	* `ucs2decode` function from the punycode.js library.
 	*
-	* Creates an array containing the decimal code points of each Unicode
-	* character in the string. While JavaScript uses UCS-2 internally, this
-	* function will convert a pair of surrogate halves (each of which UCS-2
-	* exposes as separate characters) into a single code point, matching
-	* UTF-16.
+	* Creates an array containing the decimal code points of each Unicode character in the string.
+	* While JavaScript uses UCS-2 internally, this function will convert a pair of surrogate halves
+	*(each of which UCS-2 exposes as separate characters) into a single code point, matching UTF-16.
 	*
 	* @see     <punycode.ucs2.encode>
 	* @see     <https://mathiasbynens.be/notes/javascript-encoding>
@@ -139,6 +133,7 @@
 	* @param   {String}  string   The Unicode input string (UCS-2).
 	*
 	* @return  {Array}   The new array of code points.
+	*
 	*/
 
 	function decode(string)
@@ -176,24 +171,23 @@
 	}
 
    /**
-	* `setOptions` is a function to extend a set of default options with
-	* the ones given in the function call. Available options are described
-	* below.
+	* `setOptions` is a function to extend a set of default options with the ones given in the
+	* function call. Available options are described below.
 	*
-	* {Boolean}  hardReturns      Use two returns to seperate a paragraph
-	*                             instead of one.
+	* {Boolean}  hardReturns      Use two returns to seperate a paragraph instead of one.
+	*
 	* {Boolean}  stripTags        Strip HTML tags before counting the values.
-	* {Boolean}  ignoreReturns    Ignore returns when calculating the `all`
-	*                             property.
+	* {Boolean}  ignoreReturns    Ignore returns when calculating the `all` property.
+	*
 	* {Boolean}  ignoreZeroWidth  Ignore zero-width space characters.
 	*
 	* @private
 	*
-	* @param   {Object}  options  Countable allows the options described above.
-	*                             They can be used in a function call to
-	*                             override the default behaviour.
+	* @param   {Object}  options  Countable allows the options described above. They can be used
+	*                             in a function call to override the default behaviour.
 	*
-	* @return  {Object}  The new options object.
+	* @return  {Object}           The new options object.
+	*
 	*/
 
 	function setOptions (options)
@@ -203,7 +197,7 @@
 			hardReturns: false,
 			stripTags: false,
 			ignoreReturns: false,
-			ignoreZeroWidth: true
+			ignoreZeroWidth: true,
 		}
 
 		for (var prop in options)
@@ -217,15 +211,15 @@
 	}
 
    /**
-	* `loop` is a helper function to iterate over a collection, e.g. a NodeList or an Array.
+	*`loop` is a helper function to iterate over a collection, e.g. a NodeList or an Array.
 	* The callback receives the current element as the single parameter.
 	*
 	* @private
 	*
 	* @param  {Array}     which     The collection to iterate over.
 	*
-	* @param  {Function}  callback  The callback function to call on each
-	*                               iteration.
+	* @param  {Function}  callback  The callback function to call on each iteration.
+	*                               
 	*/
 
 	function loop (collection, callback)
@@ -245,9 +239,125 @@
 		}
 	}
 
+	/**
+	*`strip` is a helper function to trim an element's value, optionally stripping HTML tags.
+	*
+	* The initial implementation to allow for HTML tags stripping was created
+	* @craniumslows while the current one was created by @Rob--W.
+	*
+	* @see <http://goo.gl/Exmlr>
+	* @see <http://goo.gl/gFQQh>
+	*
+	* @private
+	*
+	* @param   {Element}  element  The element whose value is to be counted.
+	*
+	* @param   {Object}   options  The options to use for the trimming.
+	*
+	* @return  {Object}   The trimmed element.
+	*                               
+	*/
+
+	function strip (element, options)
+	{
+		var raw = 'value' in element ? element.value : element.innerText || element.textContent;
+
+		if (options.stripTags) { raw = raw.replace(/<\/?[a-z][^>]*>/gi, ''); }
+		if (options.ignoreZeroWidth) { raw = raw.replace(/[\u200B]+/, ''); }
+
+		return raw.trim();
+	}
+
+	/**
+	*`countingSort` is a helper function to sort a frequency map.
+	* This sort has O(n) linear complexity.
+	*
+	* The initial implementation of this count sort was by nehamundada
+	*
+	* @see <https://github.com/nehamundada/Word_Frequency_counter>
+	*
+	* @private
+	*
+	* @param   {Element}  element  The element object to be sorted.
+	*
+	* @param   {Object}   options  The options to use for sorting.
+	*                              default freqItemCount = 10
+	*
+	* @return  {Object}   The sorted element.
+	*                               
+	*/
+
+	function countingSort (element, options)
+	{
+		var sorted = [], limited = [], count = 0, top = options.max;
+
+		for (var i = 0; i <= options.max; i++)
+		{
+			sorted[i] = [];
+		}
+
+	   /* Push  */
+        for (var word in element)
+        {
+        	if (element.hasOwnProperty(word)) { sorted[element[word]].push(word); }
+        }
+
+        while (count < options.max)
+        {
+        	if(sorted[top].length > 0)
+        	{
+        		limited.push(sorted[top].pop);
+        		count++;
+        	}
+        	else { top--; }
+        	
+        }
+
+		return limited;
+	}
+
+	/**
+	*`freq` counts the frequency of words in an element.
+	*
+	* @private
+	*
+	* @param   {Element}  element  The element whose word frequency is to be analyzed
+	*
+	* @param   {Object}   options  The options to use for the analysis.
+	*
+	* @return  {Object}   The object containing the frequency of words.
+	*
+	*/
+
+	function freq (element, options)
+	{
+		options.max = 0;
+
+		if (!options.hasOwnProperty("freqItemCount") || options.freqItemCount <= 0)
+		{
+			options.freqItemCount = 10;
+		}
+
+		var wordFreqMap = {},
+			trimmed = strip(element, setOptions(options)),
+			words = trimmed ? (trimmed.replace(/['";:,.?¿\-!¡]+/g, '').match(/\S+/g) ||
+						[]).length : 0;
+
+		for (var word in words)
+		{
+            if (word in wordFreqMap)
+            {
+            	if(++wordFreqMap[word] > options.max) { options.max = wordFreqMap[word]; };
+            }
+	        else { wordFreqMap[word] = 1; }
+        }
+
+        return countingSort(wordFreqMap, options);
+	}
+
+
    /**
-	* `count` trims an element's value, optionally strips HTML tags and counts
-	* paragraphs, sentences, words, characters and characters plus spaces.
+	*`count` counts paragraphs, sentences, words, characters and characters plus spaces.
 	*
 	* @private
 	*
@@ -255,40 +365,20 @@
 	*
 	* @param   {Object}   options  The options to use for the counting.
 	*
-	* @return  {Object}   The object containing the number of paragraphs,
-	*                     sentences, words, characters and characters plus
-	*                     spaces.
+	* @return  {Object}   The object containing the number of paragraphs, sentences, words, 
+	*                     characters and characters plus spaces.
+	*
 	*/
 
 	function count (element, options)
 	{
-		var original = 'value' in element ? element.value : element.innerText ||
-				element.textContent,
-			trimmed;
-
-	   /**
-		* The initial implementation to allow for HTML tags stripping was created
-		* @craniumslows while the current one was created by @Rob--W.
-		*
-		* @see <http://goo.gl/Exmlr>
-		* @see <http://goo.gl/gFQQh>
-		*/
-
-		if (options.stripTags)
-		{
-			original = original.replace(/<\/?[a-z][^>]*>/gi, '');
-		}
-		if (options.ignoreZeroWidth)
-		{
-			original = original.replace(/[\u200B]+/, '');
-		}
-
-		trimmed = original.trim();
+		var trimmed = strip(element, options);
 
 		/**
 		* Most of the performance improvements are based on the works of @epmatsw.
 		*
 		* @see <http://goo.gl/SWOLB>
+		*
 		*/
 
 		return {
@@ -297,49 +387,47 @@
 			sentences: trimmed ? (trimmed.match(/[.?!…]+./g) || []).length + 1 : 0,
 			words: trimmed ? (trimmed.replace(/['";:,.?¿\-!¡]+/g, '').match(/\S+/g) ||
 				[]).length : 0,
-			characters: trimmed ? _decode(trimmed.replace(/\s/g, '')).length : 0,
-			all: _decode(options.ignoreReturns ? original.replace(/[\n\r]/g, '') : original).length
+			characters: trimmed ? decode(trimmed.replace(/\s/g, '')).length : 0,
+			all: decode(options.ignoreReturns ? original.replace(/[\n\r]/g, '') : original).length
 		}
 	}
 
-	/*************************************************************************** Countable Object */
+/******************************************************************************* Countable Object */
    /**
-	* This is the main object that will later be exposed to other scripts. It
-	* holds all the public methods that can be used to enable the Countable
-	* functionality.
+	* This is the main object that will later be exposed to other scripts. It holds all the public
+	* methods that can be used to enable the Countable functionality.
+	*
 	*/
 
-	var Countable = {
-
-   /**
-	* The `live` method binds the counting handler to all given elements. The
-	* event is either `oninput` or `onkeydown`, based on the capabilities of
-	* the browser.
-	*
-	* @param   {Nodes}     elements   All elements that should receive the
-	*                                 Countable functionality.
-	*
-	* @param   {Function}  callback   The callback to fire whenever the
-	*                                 element's value changes. The callback is
-	*                                 called with the relevant element bound
-	*                                 to `this` and the counted values as the
-	*                                 single parameter.
-	*
-	* @param   {Object}    [options]  An object to modify Countable's
-	*                                 behaviour. Refer to `_extendDefaults`
-	*                                 for a list of available options.
-	*
-	* @return  {Object}    Returns the Countable object to allow for chaining.
-	*/
-
-	live: function (elements, callback, options)
+	var Countable = 
 	{
-		var ops = setOptions(options),
-			bind = function (element)
+		/**
+		* The `live` method binds the counting handler to all given elements. The
+		* event is either `oninput` or `onkeydown`, based on the capabilities of
+		* the browser.
+		*
+		* @param   {Nodes}     elements   All elements that should receive the Countable
+		*                                 functionality.
+		*
+		* @param   {Function}  callback   The callback to fire whenever the  element's value
+		*                                 changes. The callback is called with the relevant element
+		*                                 bound to `this` and the counted values as the
+		*                                 single parameter.
+		*
+		* @param   {Object}    [options]  An object to modify Countable's behaviour. Refer to
+		*                                `setOptions' for a list of available options.
+		*
+		* @return  {Object}               Returns the Countable object to allow for chaining.
+		*
+		*/
+
+		live: function (elements, callback, options)
+		{
+			var bind = function (element)
 			{
 				var handler = function ()
 				{
-					callback.call(element, count(element, ops));
+					callback.call(element, count(element, setOptions(options)));
 				};
 
 				liveElements.push({
@@ -351,24 +439,64 @@
 
 				if (element.addEventListener)
 				{
-					element.addEventListener(input, handler, false)
+					element.addEventListener(input, handler, false);
 				}
-				else if (element.attachEvent)
+				else if (element.attachEvent) {	element.attachEvent('on' + input, handler);	}
+			};
+
+			if (!validateArguments(elements, callback)) { return; }
+
+			if (elements.length) { loop(elements, bind); }
+			else { bind(elements); }
+			return this;
+		},
+
+		/**
+		* The `freq` method binds the frequency analysis handler to all given elements. The
+		* event is either `oninput` or `onkeydown`, based on the capabilities of the browser.
+		*
+		* @param   {Nodes}     elements   All elements that should receive the Countable
+		*                                 functionality.
+		*
+		* @param   {Function}  callback   The callback to fire whenever the  element's value
+		*                                 changes. The callback is called with the relevant element
+		*                                 bound to `this` and the counted values as the
+		*                                 single parameter.
+		*
+		* @param   {Object}    [options]  An object to modify Countable's behaviour. 
+		*                                 Set number of most frequent words to return.
+		*
+		* @return  {Object}               Returns the Countable object to allow for chaining.
+		*
+		*/
+
+		freq: function(elements, callback, options)
+		{
+			var bind = function (element)
+			{
+				var handler = function ()
+				{	
+					callback.call(element, freq(element, options));
+				};
+
+				liveElements.push({
+					element: element,
+					handler: handler
+				});
+
+				handler();
+
+				if (element.addEventListener)
 				{
-					element.attachEvent('on' + input, handler)
+					element.addEventListener(input, handler, false);
 				}
-			}
+				else if (element.attachEvent) {	element.attachEvent('on' + input, handler);	}
+			};
 
-			if (!_validateArguments(elements, callback)) return
+			if (!validateArguments(elements, callback)) { return; }
 
-			if (elements.length)
-			{
-				loop(elements, bind)
-			}
-			else
-			{
-				bind(elements)
-			}
+			if (elements.length) { loop(elements, bind); }
+			else { bind(elements); }
 			return this;
 		},
 
@@ -378,24 +506,23 @@
 		* @param   {Nodes}  elements  All elements whose Countable functionality should be unbound.
 		*
 		* @return  {Object}  Returns the Countable object to allow for chaining.
+		*
 		*/
 
 		die: function (elements)
 		{
-			if (!_validateArguments(elements, function () {})) { return; }
+			if (!validateArguments(elements, function () {})) { return; }
 
 			loop(elements, function (element)
 			{
 				var liveElement;
 
-				loop(liveElements, function (live)
-				{
-					if (live.element === element) { liveElement = live; }
-				});
+				loop(liveElements, function (live) {
+					if (live.element === element) { liveElement = live; } });
 
 				if (!liveElement) { return; }
 
-				if (element.removeEventListener)
+				if (element.removeEventListener) 
 				{
 					element.removeEventListener(input, liveElement.handler, false);
 				}
@@ -411,8 +538,8 @@
 		},
 
 	   /**
-		* The `once` method works mostly like the `live` method, but no events are
-		* bound, the functionality is only executed once.
+		* The `once` method works mostly like the `live` method, but no events are bound,
+		* the functionality is only executed once.
 		*
 		* @alias   Countable.count
 		*
@@ -423,11 +550,11 @@
 		*								  The callback is called with the relevant element bound
 		*                                 to `this` and the counted values as the single parameter.
 		*
-		* @param   {Object}    [options]  An object to modify Countable's
-		*                                 behaviour. Refer to `_extendDefaults`
-		*                                 for a list of available options.
+		* @param   {Object}    [options]  An object to modify Countable's behaviour. Refer to
+		*                                `setOptions` for a list of available options.
 		*
 		* @return  {Object}   		      Returns the Countable object to allow for chaining.
+		*
 		*/
 
 		once: function (elements, callback, options)
@@ -436,7 +563,7 @@
 
 			loop(elements, function (element)
 			{
-				callback.call(element, count(element, setOptions(options)))
+				callback.call(element, count(element, options));
 			});
 
 			return this;
@@ -448,18 +575,18 @@
 		},
 
 	   /**
-		* The `enabled` method checks if the live-counting functionality is bound
-		* to an element.
+		* The `enabled` method checks if the live-counting functionality is bound to an element.
 		*
 		* @param   {Element}  element  A single Element.
 		*
-		* @return  {Boolean}  A boolean value representing whether Countable
-		*                     functionality is bound to the given element.
+		* @return  {Boolean}  A boolean value representing whether Countable functionality is bound
+		*                     to the given element.
+		*
 		*/
 
 		enabled: function (element)
 		{
-			var isEnabled = false
+			var isEnabled = false;
 
 			if (element && element.nodeType === 1)
 			{
@@ -474,8 +601,9 @@
 	}
 
    /**
-	* Expose Countable depending on the module system used across the
-	* application. (Node / CommonJS, AMD, global)
+	* Expose Countable depending on the module system used across the application.
+	* (Node / CommonJS, AMD, global)
+	*
 	*/
 
 	if (typeof exports === 'object')
