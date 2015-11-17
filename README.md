@@ -1,6 +1,6 @@
 # FreqCountable
 
-[![License](http://img.shields.io/badge/license-MIT-orange.svg)](https://github.com/RadLikeWhoa/Countable/blob/master/LICENSE.md)
+[![License](http://img.shields.io/badge/license-MIT-orange.svg)](https://github.com/stephenburgess8/FreqCountable/blob/master/LICENSE.md)
 
 FreqCountable is a JavaScript function to add **live paragraph-, word- and character-counting** to an HTML element. 
 
@@ -35,31 +35,4 @@ In most cases, returns should be counted as part of the `all` property. Set `ign
 
 ## Browser Support
 
-Countable supports all modern browsers. Internet Explorer is supported down to version 7. Note that some browsers don't implement the `oninput` event consistently so there might be differences in the way Countable works in different browsers.
-
-## Upgrading from version 1
-
-Upgrading from version 1.x.x is easy. Most likely, you've used something like the following:
-
-```javascript
-var area = document.getElementById('area')
-
-new Countable(area, function (counter) {
-  console.log(counter)
-}, { stripTags: true })
-```
-
-The new syntax offers more functions as described above, but to keep the live-counting functionality, you just write this:
-
-```javascript
-var area = document.getElementById('area')
-
-Countable.live(area, function (counter) {
-  console.log(counter)
-}, { stripTags: true })
-```
-
-* The callback parameter is no longer optional
-* `options.once` has been replaced with `Countable.once()`
-* `Countable.live()` and `Countable.once()` both accept one or more elements, rather than just a single one
-* Inside the callback, `this` is now bound to the current element
+FreqCountable supports all modern browsers. Internet Explorer is supported down to version 7. Note that some browsers don't implement the `oninput` event consistently so there might be differences in the way FreqCountable works in different browsers.
