@@ -289,6 +289,7 @@
 	*                               
 	*/
 
+	// TODO: reverse order of elements in limited array
 	function countingSort (element, map, options)
 	{
 		var count = 0,
@@ -336,30 +337,46 @@
 	*
 	*/
 
+	// TODO Add excluded wordlist
 	function freq (element, options)
 	{		
 		var words = [],
 			wordCount = 0,
 			wordFreqMap = {},
-			trimmed = strip(element, setOptions(options));
+			trimmed = strip(element, setOptions(options)),
+			excluded = ["a", "and", "of", "the", "to", "in", "as", "that", "is", "for", "be", 
+						"with", "an", "would", "I", "or", "this", "on", "are", "not", "could", 
+						"In", "have", "it", "was", "The", "can", "they", "more", "from", "use",
+						"most", "my"];
 
 		words = trimmed ? (trimmed.replace(/['";:,.?¿\-!¡]+/g, '').match(/\S+/g) ||
 						[]) : 0;
+
 		wordCount = words ? words.length : 0;
 
 		if (wordCount == 0) { return; }
 		options.max = 1;
 		for (var word in words)
 		{
-            if (wordFreqMap.hasOwnProperty(words[word]))
-            {
-            	wordFreqMap[words[word]] = wordFreqMap[words[word]] + 1;
-            	if(wordFreqMap[words[word]] > options.max)
-            	{ 
-            		options.max = wordFreqMap[words[word]]; 
-            	};
-            }
-	        else { wordFreqMap[words[word]] = 1;}
+			if (excluded.indexOf(words[word]) === -1) {
+
+	            	console.log(words[word]);
+				if (wordFreqMap.hasOwnProperty(words[word]))
+	            {
+	            	wordFreqMap[words[word]] = wordFreqMap[words[word]] + 1;
+	            	if(wordFreqMap[words[word]] > options.max)
+	            	{ 
+	            		options.max = wordFreqMap[words[word]]; 
+	            	};
+	            }
+		        else { wordFreqMap[words[word]] = 1;}
+			}
+			else
+			{
+				delete words[word];
+				wordCount--;
+			}
+            
         }
 
         if (options.freqItemCount > wordCount) { options.freqItemCount = wordCount }
@@ -400,8 +417,7 @@
 			sentences: trimmed ? (trimmed.match(/[.?!…]+./g) || []).length + 1 : 0,
 			words: trimmed ? (trimmed.replace(/['";:,.?¿\-!¡]+/g, '').match(/\S+/g) ||
 				[]).length : 0,
-			characters: trimmed ? decode(trimmed.replace(/\s/g, '')).length : 0,
-			all: decode(options.ignoreReturns ? element.replace(/[\n\r]/g, '') : element).length
+			characters: trimmed ? decode(trimmed.replace(/\s/g, '')).length : 0
 		}
 	}
 
